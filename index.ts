@@ -1,6 +1,9 @@
 import { stringify } from "@std/csv/stringify";
-import polyandria from "./polyandria/parse.ts";
+import { exists } from "@std/fs";
 import { html, htmlRoot, htmlSec } from "@huguesguilleus/html";
+
+import albuscorvus from "./catalog-albuscorvus.ts";
+import polyandria from "./polyandria/parse.ts";
 
 export async function output(
   books: readonly Record<string, string>[],
@@ -26,6 +29,8 @@ export async function output(
           "table{border-collapse:collapse;width:100%}",
           "table,th,td{border:1px solid}",
           "th,td{padding:.2ex}",
+          "tr:hover{background:silver}",
+          "td:empty{background:grey}",
         ),
       ),
       html(
@@ -52,5 +57,23 @@ export async function output(
   );
 }
 
-await Deno.mkdir("output", { recursive: true });
-output(await polyandria(), "polyandria");
+export async function cacheOrFetch(
+  url: string | Request,
+  path: string,
+): Promise<string> {
+  if (await exists(path)) {
+    return Deno.readTextFile(path);
+  }
+  const response = await fetch(url);
+  console.log(response.url, "=>", response.status, response.statusText);
+  const data = await response.text();
+  await Deno.writeTextFile(path, data);
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  return data;
+}
+
+if (import.meta.main) {
+  await Deno.mkdir("output", { recursive: true });
+  await output(await polyandria(), "polyandria");
+  await output(await albuscorvus(), "albuscorvus");
+}
