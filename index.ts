@@ -3,8 +3,8 @@ import { exists } from "@std/fs";
 import { html, htmlRoot, htmlSec } from "@huguesguilleus/html";
 
 import albuscorvus from "./catalog-albuscorvus.ts";
-import pgbooks from "./catalog-pgbooks.ts";
 import polyandria from "./polyandria/parse.ts";
+import samtambooks from "./catalog-samtambooks.ts";
 
 export async function output(
   books: readonly Record<string, string>[],
@@ -76,6 +76,6 @@ export async function cacheOrFetch(
 if (import.meta.main) {
   await Deno.mkdir("output", { recursive: true });
   await output(await albuscorvus(), "albuscorvus");
-  await output(await pgbooks(), "pgbooks");
   await output(await polyandria(), "polyandria");
+  await output(await samtambooks(), "samtambooks");
 }
