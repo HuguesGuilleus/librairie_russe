@@ -1,11 +1,13 @@
+#!/usr/bin/env deno run --allow-net --allow-write=data --allow-write=output
+
 import { stringify } from "@std/csv/stringify";
 import { exists } from "@std/fs";
 import { html, htmlRoot, htmlSec } from "@huguesguilleus/html";
 
 import albuscorvus from "./catalog-albuscorvus.ts";
 import pgbooks from "./catalog-pgbooks.ts";
-import polyandria from "./polyandria/parse.ts";
 import samtambooks from "./catalog-samtambooks.ts";
+import polyandria from "./catalog-polyandria.ts";
 
 export async function output(
   books: readonly Record<string, string>[],
@@ -48,8 +50,13 @@ export async function output(
           ...books.map((book) =>
             html(
               "tr",
-              [...Object.entries(book)].map(([_, value]) =>
-                html("td", value ?? "")
+              [...Object.entries(book)].map(([_, value = ""]) =>
+                html(
+                  "td",
+                  !!value.match(/^https?:\/\//)
+                    ? htmlSec`<a href="${value}">${value}</a>`
+                    : value,
+                )
               ),
             )
           ),
