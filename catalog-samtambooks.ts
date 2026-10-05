@@ -6,7 +6,7 @@ export default async function (): Promise<Record<string, string>[]> {
   const ids = new Set();
   for (let page = 1; page <= 63; page++) {
     const url = `https://samtambooks.com/catalog/?PAGEN_7=${page}`;
-    const html = await cacheOrFetch(url, `data/pgbooks/index.${page}.html`);
+    const html = await cacheOrFetch(url, `data/samtambooks/index.${page}.html`);
     for (const [_, id] of html.matchAll(/<a href="\/book\/([^"]+)\/">/g)) {
       ids.add(id);
     }
@@ -15,7 +15,7 @@ export default async function (): Promise<Record<string, string>[]> {
   const books = [];
   for (const id of ids) {
     const url = `https://samtambooks.com/book/${id}/`;
-    const html = await cacheOrFetch(url, `data/pgbooks/item.${id}.html`);
+    const html = await cacheOrFetch(url, `data/samtambooks/item.${id}.html`);
 
     const [_0, titre = ""] = html.match(
       /<h1 class=".*?">\s*([^<]+)\s*<\/h1>/,
