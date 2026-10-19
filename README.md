@@ -1,18 +1,12 @@
 # Extraction de catalogue de livre de jeunesse russe
 
-# Introduction
+This remote download book index from online russian bookstore.
 
-https://isbndb.com/isbn-database
-
-mais payant
-
-livre sur l'édition jeunesse en Russie
-
-- pb: ananlyse statistiques de production beaucoup d'entretient
-- pb: que la dernière édition, on ne connait pas la première édition
-- catalogue de différente année
-
-annnée pub, titre, auteur, langue origine ...
+```sh
+deno run --allow-net --allow-write=data --allow-write=output index.ts
+# data/ for cache
+# output/ with csv and html table
+```
 
 ## Site web
 
@@ -21,19 +15,3 @@ annnée pub, titre, auteur, langue origine ...
 - https://samokatbook.ru/catalog/
 - https://www.apricotbooks.ru/catalog
 - https://www.pgbooks.ru/
-
-chambre du livre -> libriaire nationale (Russie)
-
-## TODO
-
-colume de données
-
-archive.org
-
-|      |                                     |
-| ---- | ----------------------------------- |
-| ok   | https://albuscorvus.ru/catalog/     |
-| ok   | https://polyandria.ru/catalog/      |
-| ok   | https://samokatbook.ru/catalog/     |
-| todo | https://www.apricotbooks.ru/catalog |
-| ok   | https://www.pgbooks.ru/             |
